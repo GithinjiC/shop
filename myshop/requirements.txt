@@ -1,0 +1,17 @@
+amqp==2.6.1
+asgiref==3.3.1
+Babel==2.9.0
+billiard==3.6.3.0
+cart==1.2.1
+celery==4.4.2
+Django==3.0.13
+flower==0.9.3
+kombu==4.6.11
+Pillow==7.0.0
+psycopg2-binary==2.8.4
+pycryptodome==3.10.1
+pytz==2021.1
+SHop==0.0.2
+sqlparse==0.4.1
+tornado==5.1.1
+vine==1.3.0
