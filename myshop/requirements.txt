@@ -13,6 +13,7 @@ chardet==4.0.0
 cssselect2==0.4.1
 defusedxml==0.7.1
 Django==3.0.13
+django-localflavor==3.0.1
 django-parler==2.2
 django-rosetta==0.9.6
 flower==0.9.3
@@ -25,7 +26,9 @@ psycopg2-binary==2.8.4
 pycparser==2.20
 pycryptodome==3.10.1
 Pyphen==0.10.0
+python-stdnum==1.16
 pytz==2021.1
+redis==3.5.3
 requests==2.25.1
 SHop==0.0.2
 six==1.15.0
