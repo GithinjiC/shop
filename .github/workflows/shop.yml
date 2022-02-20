@@ -2,10 +2,10 @@ name: shop-actions
 on:
   push:
     branches:
-      - master
+      - '**'
   pull_request:
     branches:
-      - master
+      - '**'
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -57,18 +57,22 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install dependencies and build
-        run: |
-          cd myshop
-          python3 -m pip install --upgrade pip
-          pip install -r requirements.txt
-          docker-compose run web python manage.py makemigrations
-          docker-compose run web python manage.py migrate
-          docker-compose up -d
-          cd ..
+#      - name: Install dependencies and build
+#        run: |
+#          cd myshop
+#          python3 -m pip install --upgrade pip
+#          pip install -r requirements.txt
+#          docker-compose run web python manage.py makemigrations
+#          docker-compose run web python manage.py migrate
+#          docker-compose up -d
+#          cd ..
 
       - name: Ansible
-        run: |
-          pip install --upgrade pip
-          pip install ansible
-          ansible-playbook ansible/qa_playbook.yml -i ansible/hosts -vv
+        uses: saubermacherag/ansible-playbook-docker-action@v1.4
+        with:
+          playbookName: 'ansible/playbook.yml'
+          inventoryFile: 'ansible/hosts'
+#        run: |
+#          pip install --upgrade pip
+#          pip install ansible
+#          ansible-playbook ansible/qa_playbook.yml -i ansible/hosts -vv
