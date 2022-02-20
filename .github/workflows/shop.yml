@@ -48,10 +48,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies and build
         run: |
-          python3 -m pip install --upgrade pip
-          pip install -r requirements.txt
-          docker-compose run web python manage.py makemigrations
-          docker-compose run web python manage.py migrate
-          docker-compose up -d
-      - name: Test
-        run: docker run --network container:myshop_web_1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8000/
+          ls -la
+#          cd myshop
+#          python3 -m pip install --upgrade pip
+#          pip install -r requirements.txt
+#          docker-compose run web python manage.py makemigrations
+#          docker-compose run web python manage.py migrate
+#          docker-compose up -d
+#      - name: Test
+#        run: docker run --network container:myshop_web_1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8000/
