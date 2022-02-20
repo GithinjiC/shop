@@ -106,6 +106,7 @@ env.bak/
 venv.bak/
 my_env/
 shop_env/
+data/
 
 # certificates and cert.key
 cert.crt
