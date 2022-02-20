@@ -68,11 +68,11 @@ jobs:
 #          cd ..
 
       - name: Ansible
-        uses: saubermacherag/ansible-playbook-docker-action@v1.4
-        with:
-          playbookName: 'ansible/playbook.yml'
-          inventoryFile: 'ansible/hosts'
-#        run: |
-#          pip install --upgrade pip
-#          pip install ansible
-#          ansible-playbook ansible/qa_playbook.yml -i ansible/hosts -vv
+#        uses: /.github/actions/actions.yml
+#        with:
+#          playbookName: 'ansible/playbook.yml'
+#          inventoryFile: 'ansible/hosts'
+        run: |
+          pip install --upgrade pip
+          pip install ansible
+          ansible-playbook ansible/playbook.yml -i ansible/hosts -vv
