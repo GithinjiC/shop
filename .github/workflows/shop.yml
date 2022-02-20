@@ -46,13 +46,17 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Cache
+        uses: actions/cache@v2
+        env:
+          cache-name: pip-dependencies
       - name: Install dependencies and build
         run: |
-          ls -la
           cd myshop
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
           docker-compose run web python manage.py makemigrations
           docker-compose run web python manage.py migrate
           docker-compose up -d
-#      - name: Test
-#        run: docker run --network container:myshop_web_1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8000/
+      - name: Test
+        run: docker run --network container:myshop_web_1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8000/
