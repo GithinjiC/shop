@@ -49,7 +49,8 @@ jobs:
       - name: Install dependencies and build
         run: |
           ls -la
-#          cd myshop
+          cd myshop
+          ls -la
 #          python3 -m pip install --upgrade pip
 #          pip install -r requirements.txt
 #          docker-compose run web python manage.py makemigrations
