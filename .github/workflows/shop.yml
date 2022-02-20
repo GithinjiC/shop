@@ -50,11 +50,9 @@ jobs:
         run: |
           ls -la
           cd myshop
-          ls -la
-#          python3 -m pip install --upgrade pip
-#          pip install -r requirements.txt
-#          docker-compose run web python manage.py makemigrations
-#          docker-compose run web python manage.py migrate
-#          docker-compose up -d
+          pip install -r requirements.txt
+          docker-compose run web python manage.py makemigrations
+          docker-compose run web python manage.py migrate
+          docker-compose up -d
 #      - name: Test
 #        run: docker run --network container:myshop_web_1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8000/
