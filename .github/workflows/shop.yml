@@ -47,7 +47,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies and build
         run: |
-          cd myshop
           python3 -m pip install --upgrade
           pip install -r requirements.txt
           docker-compose run web python manage.py makemigrations
