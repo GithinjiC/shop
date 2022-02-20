@@ -1,0 +1,57 @@
+name: shop-actions
+on:
+  push:
+#    branches:
+#      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+#        db_name:
+#          - postgres
+#        db_pass:
+#          - postgres
+#        db_user:
+#          - postgres
+#        db_host:
+#          - db
+#        db_port:
+#          - 5432
+#
+#    services:
+#      postgres:
+#        image: postgres:latest
+#        env:
+#          POSTGRES_DB: ${{ matrix.db_name }}
+#          POSTGRES_USER: ${{ matrix.db_user }}
+#          POSTGRES_PASSWORD: ${{ matrix.db_pass }}
+#        ports:
+#          - 5432:5432
+#        options:
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies and build
+        run: |
+          cd myshop
+          python -m pip install --upgrade
+          pip install -r requirements.txt
+          docker-compose run web python manage.py makemigrations
+          docker-compose run web python manage.py migrate
+          docker-compose up -d
+      - name: Test
+        run: docker run --network container:myshop_web_1 appropriate/curl -s --retry 10 --retry-connrefused http://localhost:8000/
