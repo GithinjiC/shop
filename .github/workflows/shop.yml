@@ -45,8 +45,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies and build
-        run: |
+      - run: |
           cd myshop
           python -m pip install --upgrade
           pip install -r requirements.txt
