@@ -2,7 +2,7 @@ name: shop-actions
 on:
   push:
     branches:
-    - '**'
+      - '**'
   pull_request:
     branches:
       - '**'
@@ -57,11 +57,22 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Install dependencies and build
+#      - name: Install dependencies and build
+#        run: |
+#          cd myshop
+#          python3 -m pip install --upgrade pip
+#          pip install -r requirements.txt
+#          docker-compose run web python manage.py makemigrations
+#          docker-compose run web python manage.py migrate
+#          docker-compose up -d
+#          cd ..
+
+      - name: Ansible
+#        uses: /.github/actions/actions.yml
+#        with:
+#          playbookName: 'ansible/playbook.yml'
+#          inventoryFile: 'ansible/hosts'
         run: |
-          cd myshop
-          python3 -m pip install --upgrade pip
-          pip install -r requirements.txt
-          docker-compose run web python manage.py makemigrations
-          docker-compose run web python manage.py migrate
-          docker-compose up -d
+          pip install --upgrade pip
+          pip install ansible
+          ansible-playbook ansible/playbook.yml -i ansible/hosts -vv

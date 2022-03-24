@@ -1,0 +1,5 @@
+path:
+  top_dir: /home/Documents/
+  shop_dir: /home/Documents/shop
+
+git_repo: git@github.com:GithinjiC/shop.git

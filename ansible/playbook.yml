@@ -1,0 +1,25 @@
+---
+#TODO: Check Docker and Docker Compose installed
+
+- name: Git Pull, Build, Run
+  hosts: localhost
+  connection: local
+  become_user: lilith
+  gather_facts: true
+  tasks:
+    - name: Git Pull
+      git:
+        repo: git@github.com:GithinjiC/shop.git
+        dest: "/shop/"
+    - name: Make migrations
+      command:
+        chdir: "/home/shop/myshop/"
+        cmd: docker-compose run web python manage.py makemigrations
+    - name: Migrate
+      command:
+        chdir: "/home/shop/myshop/"
+        cmd: docker-compose run web python manage.py makemigrations
+    - name: Up command
+      command:
+        chdir: "/home/shop/myshop/"
+        cmd: docker-compose up

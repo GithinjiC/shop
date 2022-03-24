@@ -1,0 +1,62 @@
+---
+- name: Install docker-ce
+  no_log: true
+  hosts: dev
+  become: true
+  tasks:
+    - name: Check version
+      no_log: true
+      package_facts:
+        manager: apt
+    - name: Install aptitude
+      apt: name=aptitude state=latest update_cache=true force_apt_get=true
+      when: "'aptitude' not in ansible_facts.packages"
+    - name: Install packages
+      apt: name={{ item }} state=latest update_cache=true
+      loop: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+      when: "'item' not in ansible_facts.packages"
+    - name: Add Docker GPG apt key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: Check /etc/apt/sources.list.d/docker.list
+      stat:
+        path: /etc/apt/sources.list.d/docker.list
+      register: source_list
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+        update_cache: true
+      when: source_list.stat.exists == false
+    - name: Update and install docker-ce
+      apt: update_cache=true name=docker-ce state=latest
+      when: "'docker-ce' not in ansible_facts.packages"
+    - name: Enable docker on restart
+      systemd:
+        name: docker
+        enabled: true
+
+- name: Install docker-compose
+  no_log: true
+  hosts: dev
+  become: true
+  tasks:
+    - name: Check version
+      no_log: true
+      package_facts:
+        manager: apt
+    - name: Download docker-compose 1.29.2
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: u+x
+    - name: Check docker-compose file exists
+      stat:
+        path: /usr/local/bin/docker-compose
+      register: docker_compose
+    - name: docker-compose version
+      fail:
+        msg: "docker-compose not installed"
+      when: docker_compose.stat.exists == false
+...
