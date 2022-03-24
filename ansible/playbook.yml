@@ -22,4 +22,5 @@
     - name: Up command
       command:
         chdir: "/home/shop/myshop/"
-        cmd: docker-compose up
+        cmd: docker-compose up -d
+...
