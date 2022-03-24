@@ -1,51 +1,25 @@
 ---
-- name: Directory Structure
-  hosts: localhost
-  gather_facts: false
-  vars_files:
-    - variables/vars.yml
-  tasks:
-    - name: Top dir Status
-      stat:
-        path: "{{ path['top_dir'] }}"
-      register: top_dir
-    - name: Create main dir if non-existent
-      file:
-        path: "{{ path['top_dir'] }}"
-        state: directory
-      when: top_dir.stat.exists == false
-    - name: Base dir status
-      stat:
-        path: "{{ path['shop_dir'] }}"
-      register: qa_dir
-    - name: Create QA dir if non-existent
-      file:
-        path: "{{ path['shop_dir'] }}"
-        state: directory
-      when: qa_dir.stat.exists == false
-
 #TODO: Check Docker and Docker Compose installed
 
-- name: QA Git Pull, Build, Run
+- name: Git Pull, Build, Run
   hosts: localhost
-  gather_facts: false
-  vars_files:
-    - variables/vars.yml
+  connection: local
+  become_user: lilith
+  gather_facts: true
   tasks:
     - name: Git Pull
       git:
-        repo: "{{ git_repo }}"
-        dest: "{{ path['shop_dir'] }}"
-      register: qa_pull
+        repo: git@github.com:GithinjiC/shop.git
+        dest: "/shop/"
     - name: Make migrations
       command:
-        chdir: "{{ path['shop_dir'] }}"
+        chdir: "/home/shop/myshop/"
         cmd: docker-compose run web python manage.py makemigrations
     - name: Migrate
       command:
-        chdir: "{{ path['shop_dir'] }}"
+        chdir: "/home/shop/myshop/"
         cmd: docker-compose run web python manage.py makemigrations
     - name: Up command
       command:
-        chdir: "{{ path['shop_dir'] }}"
+        chdir: "/home/shop/myshop/"
         cmd: docker-compose up
