@@ -1,3 +1,4 @@
+import weasyprint
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.admin.views.decorators import staff_member_required
@@ -8,10 +9,14 @@ from .models import OrderItem, Order
 from .forms import OrderCreateForm
 from cart.cart import Cart
 from .tasks import order_created
-import weasyprint
+from shop import metrics
 
 
+@metrics.REQUEST_TIME.time()
+@metrics.EXCEPTIONS.count_exceptions(ValueError)
+@metrics.PROGRESS.track_inprogress()
 def order_create(request):
+    metrics.REQUESTS.labels(view_function='order_create').inc()
     cart = Cart(request)
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
@@ -35,14 +40,22 @@ def order_create(request):
     return render(request, 'orders/order/create.html', {'cart': cart, 'form': form})
 
 
+@metrics.REQUEST_TIME.time()
+@metrics.EXCEPTIONS.count_exceptions(ValueError)
+@metrics.PROGRESS.track_inprogress()
 @staff_member_required
 def admin_order_detail(request, order_id):
+    metrics.REQUESTS.labels(view_function='admin_order_detail').inc()
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'admin/orders/order/detail.html', {'order': order})
 
 
+@metrics.REQUEST_TIME.time()
+@metrics.EXCEPTIONS.count_exceptions(ValueError)
+@metrics.PROGRESS.track_inprogress()
 @staff_member_required
 def admin_order_pdf(request, order_id):
+    metrics.REQUESTS.labels(view_function='admin_order_pdf').inc()
     order = get_object_or_404(Order, id=order_id)
     html = render_to_string('orders/order/pdf.html', {'order': order})
     response = HttpResponse(content_type='application/pdf')

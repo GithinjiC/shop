@@ -46,9 +46,12 @@ INSTALLED_APPS = [
     'rosetta',
     'parler',
     'localflavor',
+    'django_prometheus',
+    # 'ddtrace.contrib.django',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -57,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'myshop.urls'
@@ -90,12 +94,10 @@ DATABASES = {
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
         'NAME': 'shop',
         'USER': 'postgres',
-        # 'USER': 'lilith',
         'PASSWORD': 'postgres',
-        # 'PASSWORD': 'Vallakavaddi',
         'HOST': 'db',
         'PORT': 5432,
     }
@@ -168,9 +170,9 @@ CART_SESSION_ID = 'cart'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Braintree settings
-BRAINTREE_MERCHANT_ID = '6rbmtkhxqyjv6y6y'
-BRAINTREE_PUBLIC_KEY = 'wr7cbrxvs566bndc'
-BRAINTREE_PRIVATE_KEY = 'aeabf9b347d7aed9d267cc7fe44f5e3b'
+BRAINTREE_MERCHANT_ID = ''
+BRAINTREE_PUBLIC_KEY = ''
+BRAINTREE_PRIVATE_KEY = ''
 
 import braintree
 BRAINTREE_CONF = braintree.Configuration(

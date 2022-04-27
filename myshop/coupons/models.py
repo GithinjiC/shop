@@ -1,8 +1,9 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django_prometheus.models import ExportModelOperationsMixin
 
 
-class Coupon(models.Model):
+class Coupon(ExportModelOperationsMixin('coupon'), models.Model):
     code = models.CharField(max_length=50, unique=True)
     valid_from = models.DateTimeField()
     valid_to = models.DateTimeField()
