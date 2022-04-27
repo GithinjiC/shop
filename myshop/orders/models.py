@@ -4,9 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from shop.models import Product
 from coupons.models import Coupon
 from decimal import Decimal
+from django_prometheus.models import ExportModelOperationsMixin
 
 
-class Order(models.Model):
+class Order(ExportModelOperationsMixin('order'), models.Model):
     first_name = models.CharField(_('first name'), max_length=50)
     last_name = models.CharField(_('last name'), max_length=50)
     email = models.EmailField(_('e-mail'))
@@ -31,7 +32,7 @@ class Order(models.Model):
         return total_cost - total_cost * (self.discount / Decimal(100))
 
 
-class OrderItem(models.Model):
+class OrderItem(ExportModelOperationsMixin('order_item'), models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, related_name='order_items', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)

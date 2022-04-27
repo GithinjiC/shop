@@ -1,9 +1,10 @@
 from django.db import models
 from django.urls import reverse
 from parler.models import TranslatableModel, TranslatedFields
+from django_prometheus.models import ExportModelOperationsMixin
 
 
-class Category(TranslatableModel):
+class Category(ExportModelOperationsMixin('category'), TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=200, db_index=True, unique=True),
         slug=models.SlugField(max_length=200, db_index=True, unique=True)
@@ -21,7 +22,7 @@ class Category(TranslatableModel):
         return reverse('shop:product_list_by_category', args=[self.slug])
 
 
-class Product(TranslatableModel):
+class Product(ExportModelOperationsMixin('product'), TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=200, db_index=True),
         slug=models.SlugField(max_length=200, db_index=True),

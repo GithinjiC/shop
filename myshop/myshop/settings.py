@@ -46,9 +46,12 @@ INSTALLED_APPS = [
     'rosetta',
     'parler',
     'localflavor',
+    'django_prometheus',
+    # 'ddtrace.contrib.django',
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -57,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'myshop.urls'
@@ -90,12 +94,10 @@ DATABASES = {
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_prometheus.db.backends.postgresql',
         'NAME': 'shop',
         'USER': 'postgres',
-        # 'USER': 'lilith',
         'PASSWORD': 'postgres',
-        # 'PASSWORD': 'Vallakavaddi',
         'HOST': 'db',
         'PORT': 5432,
     }
