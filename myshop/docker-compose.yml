@@ -1,5 +1,5 @@
 version: "3.9"
-#TODO: Change user and password details from defaults on run
+#TODO: Change user and password details from defaults
 services:
   db:
     container_name: postgres_db
